@@ -17,7 +17,7 @@ feature {NONE} -- Leer linea ingresada por el usuario
 		Result := io.last_string.split (' ')
 	end
 
-feature {APPLICATION} 	-- Iniciar menu de la aplicacion
+feature {APPLICATION} -- Iniciar menu de la aplicacion
 	iniciar_menu
 	local
 		linea_ingresada: LIST[STRING]
