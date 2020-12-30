@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <system xmlns="http://www.eiffel.com/developers/xml/configuration-1-21-0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.eiffel.com/developers/xml/configuration-1-21-0 http://www.eiffel.com/developers/xml/configuration-1-21-0.xsd" name="json_data_handler" uuid="B528F759-4309-4AF8-9D42-45EE77ADBD5C">
+	<description>Aplicacion en eiffel para el manipulamiento de archivos JSON</description>
 	<target name="json_data_handler">
 		<root class="APPLICATION" feature="make"/>
 		<file_rule>

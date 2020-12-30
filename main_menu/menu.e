@@ -22,7 +22,7 @@ feature {APPLICATION} -- Iniciar menu de la aplicacion
 	local
 		linea_ingresada: LIST[STRING]
 	do
-		print ("**Ingrese un comando**%N")
+		print ("**Ingrese un comando**xd%N")
 		from
 			-- Iniciar leyendo lineas
 			print("> ")
@@ -32,7 +32,7 @@ feature {APPLICATION} -- Iniciar menu de la aplicacion
 		loop
 			-- Revisar comando
 			if linea_ingresada.first.is_equal ("load") then
-				print("Cargando archivo...")
+				load_csv_file (linea_ingresada.at (2))
 			else
 				print(linea_ingresada.first + "%N")
 			end
@@ -40,6 +40,16 @@ feature {APPLICATION} -- Iniciar menu de la aplicacion
 			print("> ")
 			linea_ingresada := leer_linea
 		end
+	end
+
+feature {NONE} -- Cargar archivo CSV
+	load_csv_file (file_name: STRING)
+	local
+		csv_handler: CSV_HANDLER
+		file_lines: ARRAYED_LIST[STRING]
+	do
+		create csv_handler.set_file_name(file_name)
+		csv_handler.read_file
 	end
 
 end
