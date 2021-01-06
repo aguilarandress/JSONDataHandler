@@ -26,7 +26,7 @@ feature {APPLICATION} -- Iniciar menu de la aplicacion
 	do
 		-- Inicializar data store
 		create data_store.make
-		print ("**Ingrese un comando**xd%N")
+		print ("**Ingrese un comando**%N")
 		from
 			-- Iniciar leyendo lineas
 			print("> ")
@@ -38,8 +38,8 @@ feature {APPLICATION} -- Iniciar menu de la aplicacion
 			-- Revisar comando
 			if linea_ingresada.first.is_equal ("load") then
 				load_csv_file (linea_ingresada.at (2), linea_ingresada.at (3))
-			elseif linea_ingresada.first.is_equal ("hash") then
-				print("comando")
+			elseif linea_ingresada.first.is_equal ("save") then
+				save_json_file(linea_ingresada.at(2), linea_ingresada.at(3))
 			else
 				print(linea_ingresada.first + "%N")
 			end
@@ -55,7 +55,6 @@ feature {NONE} -- Cargar archivo CSV
 		csv_handler: CSV_HANDLER
 		json_handler: JSON_HANDLER
 		csv_structure: ARRAYED_LIST[LIST[STRING]]
-		json_result: JSON_ARRAY
 	do
 		-- Leer estructura CSV
 		create csv_handler.set_file_name (file_name)
@@ -68,6 +67,20 @@ feature {NONE} -- Cargar archivo CSV
 			print("Estructura " + nombre_estructura + " almacenada...%N")
 		else
 			print("Ya existe esta estructura...")
+		end
+	end
+
+feature {NONE} -- Crea un archivo JSON con los datos
+	save_json_file (nombre_json: STRING path: STRING)
+	local
+		json_handler: JSON_HANDLER
+		json_arr: JSON_ARRAY
+	do
+		-- Obtener datos del store
+		create json_handler.set_json_arr
+		json_arr := data_store.json_store.at(nombre_json)
+		if json_arr /= Void then
+			json_handler.save_json(path, json_arr)
 		end
 	end
 

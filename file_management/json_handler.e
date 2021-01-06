@@ -18,6 +18,38 @@ feature -- Access
 		create json_arr.make_empty
 	end
 
+feature -- Escribe un archivos JSON con los datos
+	save_json (path: STRING json_objs: JSON_ARRAY)
+		-- Guarda un archivo JSON con los datos de json_objs
+	local
+		file_lines: ARRAYED_LIST[STRING]
+		file_manager: FILE_MANAGER
+		i: INTEGER
+		current_line: STRING
+	do
+		create file_lines.make (0)
+		file_lines.extend ("[")
+		-- Add string representations of objects
+		from
+			i := 1
+		until
+			i > json_objs.count
+		loop
+			current_line := json_objs.i_th (i).representation
+
+			if i /= json_objs.count then
+				current_line.extend(',')
+			end
+			file_lines.extend (current_line)
+			i := i + 1
+		end
+		file_lines.extend ("]")
+		-- Escribir archivo
+		create file_manager.set_file_name (path)
+		file_manager.write_file(file_lines)
+		print("Archivo JSON generado...%N")
+	end
+
 feature -- Crear objetos JSON a partir de informacion CSV
 	crear_objetos (csv_structure: ARRAYED_LIST[LIST[STRING]])
 		-- Crea objetos JSON a partir de una estructura CSV
