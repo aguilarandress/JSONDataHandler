@@ -1,3 +1,7 @@
-a;19;2001
-b;18;2000
-c;17;2002
+nombre;edad;nacimiento
+X;N;B
+a;19;T
+b;18;T
+c;17;F
+c;17;F
+c;17;T

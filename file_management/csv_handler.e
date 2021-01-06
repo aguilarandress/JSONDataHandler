@@ -19,11 +19,10 @@ feature -- File name
 	end
 
 feature -- Read CSV file
-	read_file
+	read_file: ARRAYED_LIST[LIST[STRING]]
 	local
 		file_manager: FILE_MANAGER
 		csv_rows: ARRAYED_LIST[LIST[STRING]]
-		current_row: LIST[STRING]
 		file_lines: ARRAYED_LIST[STRING]
 	do
 		-- Leer lineas del archivo
@@ -32,13 +31,9 @@ feature -- Read CSV file
 		-- Obtener columnas para cada fila
 		create csv_rows.make (0)
 		across file_lines as line loop
-			current_row := line.item.split (';')
-			print("Fila: ")
-			across current_row as column loop
-				print(column)
-			end
-			csv_rows.extend (current_row)
+			csv_rows.extend (line.item.split (';'))
 		end
+		Result := csv_rows
 	end
 
 end

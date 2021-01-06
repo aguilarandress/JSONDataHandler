@@ -28,11 +28,14 @@ feature {APPLICATION} -- Iniciar menu de la aplicacion
 			print("> ")
 			linea_ingresada := leer_linea
 		until
+
 			linea_ingresada.first.is_equal("exit")
 		loop
 			-- Revisar comando
 			if linea_ingresada.first.is_equal ("load") then
-				load_csv_file (linea_ingresada.at (2))
+				load_csv_file (linea_ingresada.at (2), linea_ingresada.at (3))
+			elseif linea_ingresada.first.is_equal ("hash") then
+				print("comando")
 			else
 				print(linea_ingresada.first + "%N")
 			end
@@ -43,13 +46,20 @@ feature {APPLICATION} -- Iniciar menu de la aplicacion
 	end
 
 feature {NONE} -- Cargar archivo CSV
-	load_csv_file (file_name: STRING)
+	load_csv_file (nombre_estructura: STRING file_name: STRING)
 	local
 		csv_handler: CSV_HANDLER
-		file_lines: ARRAYED_LIST[STRING]
+		json_handler: JSON_HANDLER
+		csv_structure: ARRAYED_LIST[LIST[STRING]]
+		json_result: JSON_ARRAY
 	do
-		create csv_handler.set_file_name(file_name)
-		csv_handler.read_file
+		-- Leer estructura CSV
+		create csv_handler.set_file_name (file_name)
+		csv_structure := csv_handler.read_file
+		-- Crear estrucura JSON
+		create json_handler.set_estructuras
+		json_result := json_handler.crear_objetos (csv_structure)
+		print(json_result.representation)
 	end
 
 end
