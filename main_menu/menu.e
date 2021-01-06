@@ -57,9 +57,8 @@ feature {NONE} -- Cargar archivo CSV
 		create csv_handler.set_file_name (file_name)
 		csv_structure := csv_handler.read_file
 		-- Crear estrucura JSON
-		create json_handler.set_estructuras
-		json_result := json_handler.crear_objetos (csv_structure)
-		print(json_result.representation)
+		create json_handler.set_json_arr
+		json_handler.crear_objetos (csv_structure)
 	end
 
 end

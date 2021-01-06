@@ -21,6 +21,7 @@
 		<cluster name="json_data_handler" location=".\">
 			<cluster name="main_menu" location="C:\Users\Andres Aguilar Moya\Desktop\json_data_handler\main_menu\"/>
 			<cluster name="file_management" location="C:\Users\Andres Aguilar Moya\Desktop\json_data_handler\file_management\"/>
+			<cluster name="storage" location="C:\Users\Andres Aguilar Moya\Desktop\json_data_handler\storage\"/>
 		</cluster>
 	</target>
 </system>

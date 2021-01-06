@@ -1,6 +1,6 @@
 note
-	description: "Summary description for {JSON_HANDLER}."
-	author: ""
+	description: "Permite la manipulacion de datos y estructuras JSON"
+	author: "Andres Aguilar"
 	date: "$Date$"
 	revision: "$Revision$"
 
@@ -8,43 +8,41 @@ class
 	JSON_HANDLER
 
 create
-	set_estructuras
+	set_json_arr
 
 feature -- Access
-	estructuras: ARRAYED_LIST[JSON_OBJECT]
+	json_arr: JSON_ARRAY
 
-	set_estructuras
+	set_json_arr
 	do
-		create estructuras.make(0)
+		create json_arr.make_empty
 	end
 
 feature -- Crear objetos JSON a partir de informacion CSV
-	crear_objetos (csv_structure: ARRAYED_LIST[LIST[STRING]]): JSON_ARRAY
+	crear_objetos (csv_structure: ARRAYED_LIST[LIST[STRING]])
+		-- Crea objetos JSON a partir de una estructura CSV
 	local
 		nombre_atributos: LIST[STRING]
 		tipos_de_datos: LIST[STRING]
-		estructuras_json: JSON_ARRAY
 		i: INTEGER
 	do
 		-- Obtener nombre de los atributos y tipos
 		nombre_atributos := csv_structure.at(1)
 		tipos_de_datos := csv_structure.at(2)
-		-- Eliminar las primeras dos filas
 		-- Crear objetos json para cada fila
-		create estructuras_json.make_empty
 		from
 			i := 3
 		until
 			i > csv_structure.count
 		loop
 			-- Crear objeto y agregarlo al JSON ARRAY
-			estructuras_json.add(crear_objeto(nombre_atributos, tipos_de_datos, csv_structure.at(i)))
+			json_arr.add(crear_objeto(nombre_atributos, tipos_de_datos, csv_structure.at(i)))
 			i := i + 1
 		end
-		Result := estructuras_json
 	end
 
 	crear_objeto (nombre_atributos:LIST[STRING] tipo_datos:LIST[STRING] atributos: LIST[STRING]): JSON_OBJECT
+		-- Crea un objeto JSON nuevo
 	local
 		objeto_json: JSON_OBJECT
 		i: INTEGER
@@ -63,6 +61,7 @@ feature -- Crear objetos JSON a partir de informacion CSV
 
 feature -- Convertir atributos a tipos de datos JSON
 	convertir_atributo (valor: STRING tipo_dato: STRING): JSON_VALUE
+		-- Convierte el tipo de un atributo a un JSON_VALUE
 	local
 		new_value: JSON_VALUE
 	do
@@ -78,8 +77,8 @@ feature -- Convertir atributos a tipos de datos JSON
 		Result := new_value
 	end
 
-	-- Crea un JSON_STRING a partir de un string
 	crear_string (valor: STRING): JSON_STRING
+		-- Crea un JSON_STRING a partir de un string
 	local
 		new_string: JSON_STRING
 	do
@@ -87,8 +86,8 @@ feature -- Convertir atributos a tipos de datos JSON
 		Result := new_string
 	end
 
-	-- Crea un JSON_NUMBER a partir de un string
 	crear_number (valor: STRING): JSON_NUMBER
+		-- Crea un JSON_NUMBER a partir de un string
 	local
 		new_number: JSON_NUMBER
 	do
@@ -96,8 +95,8 @@ feature -- Convertir atributos a tipos de datos JSON
 		Result := new_number
 	end
 
-	-- Crea un JSON_BOOLEAN a partir de un char
 	crear_boolean (valor: STRING): JSON_BOOLEAN
+		-- Crea un JSON_BOOLEAN a partir de un char
 	local
 		new_boolean: JSON_BOOLEAN
 	do
