@@ -18,10 +18,14 @@ feature {NONE} -- Leer linea ingresada por el usuario
 	end
 
 feature {APPLICATION} -- Iniciar menu de la aplicacion
+	data_store: DATA_STORE
+
 	iniciar_menu
 	local
 		linea_ingresada: LIST[STRING]
 	do
+		-- Inicializar data store
+		create data_store.make
 		print ("**Ingrese un comando**xd%N")
 		from
 			-- Iniciar leyendo lineas
@@ -59,6 +63,12 @@ feature {NONE} -- Cargar archivo CSV
 		-- Crear estrucura JSON
 		create json_handler.set_json_arr
 		json_handler.crear_objetos (csv_structure)
+		-- Guardar en data store
+		if data_store.add_json_arr(nombre_estructura, json_handler.json_arr) then
+			print("Estructura " + nombre_estructura + " almacenada...%N")
+		else
+			print("Ya existe esta estructura...")
+		end
 	end
 
 end
