@@ -8,18 +8,26 @@ class
 	JSON_HANDLER
 
 create
-	set_json_arr
+	set_json_arr,
+	initialize_arr
 
 feature -- Access
 	json_arr: JSON_ARRAY
 
-	set_json_arr
+	set_json_arr (new_arr: JSON_ARRAY)
+		-- Asigna el nuevo array de JSON
+	do
+		json_arr := new_arr
+	end
+
+	initialize_arr
+		-- Inicializa un array vacio
 	do
 		create json_arr.make_empty
 	end
 
 feature -- Escribe un archivos JSON con los datos
-	save_json (path: STRING json_objs: JSON_ARRAY)
+	save_json (path: STRING)
 		-- Guarda un archivo JSON con los datos de json_objs
 	local
 		file_lines: ARRAYED_LIST[STRING]
@@ -33,11 +41,10 @@ feature -- Escribe un archivos JSON con los datos
 		from
 			i := 1
 		until
-			i > json_objs.count
+			i > json_arr.count
 		loop
-			current_line := json_objs.i_th (i).representation
-
-			if i /= json_objs.count then
+			current_line := json_arr.i_th (i).representation
+			if i /= json_arr.count then
 				current_line.extend(',')
 			end
 			file_lines.extend (current_line)
@@ -47,7 +54,6 @@ feature -- Escribe un archivos JSON con los datos
 		-- Escribir archivo
 		create file_manager.set_file_name (path)
 		file_manager.write_file(file_lines)
-		print("Archivo JSON generado...%N")
 	end
 
 feature -- Crear objetos JSON a partir de informacion CSV

@@ -1,6 +1,6 @@
 note
 	description: "Clase para manipulacion de entrada y salida del menu de la aplicacion"
-	author: ""
+	author: "Andres Aguilar"
 	date: "$Date$"
 	revision: "$Revision$"
 
@@ -60,7 +60,7 @@ feature {NONE} -- Cargar archivo CSV
 		create csv_handler.set_file_name (file_name)
 		csv_structure := csv_handler.read_file
 		-- Crear estrucura JSON
-		create json_handler.set_json_arr
+		create json_handler.initialize_arr
 		json_handler.crear_objetos (csv_structure)
 		-- Guardar en data store
 		if data_store.add_json_arr(nombre_estructura, json_handler.json_arr) then
@@ -72,15 +72,21 @@ feature {NONE} -- Cargar archivo CSV
 
 feature {NONE} -- Crea un archivo JSON con los datos
 	save_json_file (nombre_json: STRING path: STRING)
+		-- Almacena la estructura `nombre_json` en un archivo JSON
 	local
 		json_handler: JSON_HANDLER
 		json_arr: JSON_ARRAY
 	do
-		-- Obtener datos del store
-		create json_handler.set_json_arr
-		json_arr := data_store.json_store.at(nombre_json)
-		if json_arr /= Void then
-			json_handler.save_json(path, json_arr)
+		if not data_store.json_store.has (nombre_json) then
+			print("La estructura " + nombre_json + " no se encuentra almacenada...")
+		else
+			-- Obtener datos del store
+			json_arr := data_store.json_store.at(nombre_json)
+			if json_arr /= Void then
+				create json_handler.set_json_arr(json_arr)
+				json_handler.save_json(path)
+			end
+			print("Archivo JSON generado...")
 		end
 	end
 

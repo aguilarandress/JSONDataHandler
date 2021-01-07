@@ -20,6 +20,7 @@ feature {CSV_HANDLER} -- Set file name
 
 feature {CSV_HANDLER} -- Leer archivo de entrada
 	read_file: ARRAYED_LIST[STRING]
+		-- Lee un archivo y lo almacena en un arreglo
 	local
 		file_lines: ARRAYED_LIST[STRING]
 		entrada: PLAIN_TEXT_FILE
@@ -29,19 +30,24 @@ feature {CSV_HANDLER} -- Leer archivo de entrada
 		create file_lines.make (0)
 		-- Crear handle para el archivo
 		create entrada.make_open_read (file_name)
-		-- Iniciar lectura
-		from
-			entrada.read_line
-		until
-			entrada.exhausted
-		loop
-			-- Agregar linea actual al array
+		if not entrada.path_exists then
+			print("Archivo no existe...")
+		else
+			-- Iniciar lectura
+			from
+				entrada.read_line
+			until
+				entrada.exhausted
+			loop
+				-- Agregar linea actual al array
+				file_lines.extend (entrada.last_string.twin)
+				entrada.read_line
+			end
+			-- Leer linea del final
 			file_lines.extend (entrada.last_string.twin)
-			entrada.read_line
+			entrada.close
+
 		end
-		-- Leer linea del final
-		file_lines.extend (entrada.last_string.twin)
-		entrada.close
 		Result := file_lines
 	end
 
