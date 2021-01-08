@@ -40,6 +40,8 @@ feature {APPLICATION} -- Iniciar menu de la aplicacion
 				load_csv_file (linea_ingresada.at (2), linea_ingresada.at (3))
 			elseif linea_ingresada.first.is_equal ("save") then
 				save_json_file(linea_ingresada.at(2), linea_ingresada.at(3))
+			elseif linea_ingresada.first.is_equal ("savecsv") then
+				save_csv_file(linea_ingresada.at(2), linea_ingresada.at(3))
 			else
 				print(linea_ingresada.first + "%N")
 			end
@@ -93,6 +95,8 @@ feature {NONE} -- Crea un archivo JSON con los datos
 feature {NONE} -- Crea un archivo CSV con los datos de la estructura
 	save_csv_file (nombre_json: STRING path: STRING)
 		-- Almacena la estructura `nombre_json` en un archivo CSV
+	local
+		json_arr: JSON_ARRAY
 	do
 		if not data_store.json_store.has (nombre_json) then
 			print("La estructura " + nombre_json + " no se encuentra almacenada...")

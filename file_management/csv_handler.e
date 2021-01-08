@@ -36,4 +36,15 @@ feature -- Read CSV file
 		Result := csv_rows
 	end
 
+feature -- Escribir archivo CSV con datos JSON
+	write_estructura_json (json_arr: JSON_ARRAY path: STRING)
+	local
+		file_manager: FILE_MANAGER
+		json_keys: ARRAY[STRING]
+		arr_utils: ARRAY_UTILS
+	do
+		create file_manager.set_file_name (path)
+
+	end
+
 end
