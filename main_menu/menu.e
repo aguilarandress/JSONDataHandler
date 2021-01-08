@@ -90,4 +90,17 @@ feature {NONE} -- Crea un archivo JSON con los datos
 		end
 	end
 
+feature {NONE} -- Crea un archivo CSV con los datos de la estructura
+	save_csv_file (nombre_json: STRING path: STRING)
+		-- Almacena la estructura `nombre_json` en un archivo CSV
+	do
+		if not data_store.json_store.has (nombre_json) then
+			print("La estructura " + nombre_json + " no se encuentra almacenada...")
+		else
+			-- Obtener datos del store
+			json_arr := data_store.json_store.at(nombre_json)
+			print("Archivo JSON generado...")
+		end
+	end
+
 end
