@@ -10,7 +10,7 @@ class
 create
 	set_file_name
 
-feature {CSV_HANDLER} -- Set file name
+feature -- Set file name
 	file_name: STRING
 
 	set_file_name (name: STRING)
@@ -18,7 +18,7 @@ feature {CSV_HANDLER} -- Set file name
 		file_name := name
 	end
 
-feature {CSV_HANDLER} -- Leer archivo de entrada
+feature -- Leer archivo de entrada
 	read_file: ARRAYED_LIST[STRING]
 		-- Lee un archivo y lo almacena en un arreglo
 	local
@@ -51,7 +51,7 @@ feature {CSV_HANDLER} -- Leer archivo de entrada
 		Result := file_lines
 	end
 
-feature {JSON_HANDLER} -- Escribir archivo
+feature -- Escribir archivo
 	write_file (file_lines: ARRAYED_LIST[STRING])
 		-- Escribe un archivo nuevo
 	local

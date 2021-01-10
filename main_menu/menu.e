@@ -97,12 +97,17 @@ feature {NONE} -- Crea un archivo CSV con los datos de la estructura
 		-- Almacena la estructura `nombre_json` en un archivo CSV
 	local
 		json_arr: JSON_ARRAY
+		csv_handler: CSV_HANDLER
 	do
+		-- Verificar si la estructura existe
 		if not data_store.json_store.has (nombre_json) then
 			print("La estructura " + nombre_json + " no se encuentra almacenada...")
 		else
 			-- Obtener datos del store
 			json_arr := data_store.json_store.at(nombre_json)
+			-- TODO: Llamar funcion del CSV_HANDLER
+			create csv_handler.set_file_name(path)
+			--csv_handler.write_estructura_json(json_arr)
 			print("Archivo JSON generado...")
 		end
 	end
