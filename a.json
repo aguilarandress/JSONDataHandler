@@ -1,7 +1,0 @@
-[
-{"nombre":"a","edad":19,"nacimiento":true},
-{"nombre":"b","edad":18,"nacimiento":null},
-{"nombre":"c","edad":null,"nacimiento":false},
-{"nombre":"c","edad":null,"nacimiento":false},
-{"nombre":"c","edad":17,"nacimiento":true}
-]
