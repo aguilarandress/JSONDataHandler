@@ -108,9 +108,8 @@ feature {NONE} -- Crea un archivo CSV con los datos de la estructura
 		else
 			-- Obtener datos del store
 			json_arr := data_store.json_store.at(nombre_json)
-			-- TODO: Llamar funcion del CSV_HANDLER
 			create csv_handler.set_file_name(path)
-			--csv_handler.write_estructura_json(json_arr)
+			csv_handler.write_estructura_json(json_arr)
 			print("Archivo JSON generado...")
 		end
 	end
