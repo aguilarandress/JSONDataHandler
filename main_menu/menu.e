@@ -61,17 +61,23 @@ feature {NONE} -- Cargar archivo CSV
 		json_handler: JSON_HANDLER
 		csv_structure: ARRAYED_LIST[LIST[STRING]]
 	do
-		-- Leer estructura CSV
-		create csv_handler.set_file_name (file_name)
-		csv_structure := csv_handler.read_file
-		-- Crear estrucura JSON
-		create json_handler.initialize_arr
-		json_handler.crear_objetos(csv_structure)
-		-- Guardar en data store
-		if data_store.add_json_arr(nombre_estructura, json_handler.json_arr) then
-			print("Estructura " + nombre_estructura + " almacenada...%N")
+		-- Verificar si ya existe la estructura
+		if data_store.json_store.has (nombre_estructura) then
+			print("Ya existe esta estructura...%N")
 		else
-			print("Ya existe esta estructura...")
+			-- Leer estructura CSV
+			create csv_handler.set_file_name (file_name)
+			csv_structure := csv_handler.read_file
+
+			-- TODO: Save data types
+
+			-- Crear estrucura JSON
+			create json_handler.initialize_arr
+			json_handler.crear_objetos(csv_structure)
+
+			-- Guardar en data store
+			data_store.add_json_arr(nombre_estructura, json_handler.json_arr)
+			print("Estructura " + nombre_estructura + " almacenada...%N")
 		end
 	end
 
@@ -83,7 +89,7 @@ feature {NONE} -- Crea un archivo JSON con los datos
 		json_arr: ARRAYED_LIST[JSON_OBJECT]
 	do
 		if not data_store.json_store.has (nombre_json) then
-			print("La estructura " + nombre_json + " no se encuentra almacenada...")
+			print("La estructura " + nombre_json + " no se encuentra almacenada...%N")
 		else
 			-- Obtener datos del store
 			json_arr := data_store.json_store.at(nombre_json)
@@ -91,7 +97,7 @@ feature {NONE} -- Crea un archivo JSON con los datos
 				create json_handler.set_json_arr(json_arr)
 				json_handler.save_json(path)
 			end
-			print("Archivo JSON generado...")
+			print("Archivo JSON generado...%N")
 		end
 	end
 
@@ -104,13 +110,14 @@ feature {NONE} -- Crea un archivo CSV con los datos de la estructura
 	do
 		-- Verificar si la estructura existe
 		if not data_store.json_store.has(nombre_json) then
-			print("La estructura " + nombre_json + " no se encuentra almacenada...")
+			print("La estructura " + nombre_json + " no se encuentra almacenada...%N")
 		else
 			-- Obtener datos del store
 			json_arr := data_store.json_store.at(nombre_json)
+			-- Escribir archivo
 			create csv_handler.set_file_name(path)
 			csv_handler.write_estructura_json(json_arr)
-			print("Archivo JSON generado...")
+			print("Archivo CSV generado...%N")
 		end
 	end
 
