@@ -23,6 +23,7 @@ feature {APPLICATION} -- Iniciar menu de la aplicacion
 	iniciar_menu
 	local
 		linea_ingresada: LIST[STRING]
+		obj: JSON_OBJECT
 	do
 		-- Inicializar data store
 		create data_store.make
@@ -43,7 +44,7 @@ feature {APPLICATION} -- Iniciar menu de la aplicacion
 			elseif linea_ingresada.first.is_equal ("savecsv") then
 				save_csv_file(linea_ingresada.at(2), linea_ingresada.at(3))
 			else
-				print(linea_ingresada.first + "%N")
+
 			end
 			-- Continuar leyendo entrada por el usuario
 			print("> ")
@@ -63,7 +64,7 @@ feature {NONE} -- Cargar archivo CSV
 		csv_structure := csv_handler.read_file
 		-- Crear estrucura JSON
 		create json_handler.initialize_arr
-		json_handler.crear_objetos (csv_structure)
+		json_handler.crear_objetos(csv_structure)
 		-- Guardar en data store
 		if data_store.add_json_arr(nombre_estructura, json_handler.json_arr) then
 			print("Estructura " + nombre_estructura + " almacenada...%N")

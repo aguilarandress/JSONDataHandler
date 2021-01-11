@@ -30,7 +30,7 @@ feature -- Leer archivo de entrada
 		create file_lines.make (0)
 		-- Crear handle para el archivo
 		create entrada.make_open_read (file_name)
-		if not entrada.path_exists then
+		if not entrada.exists then
 			print("Archivo no existe...")
 		else
 			-- Iniciar lectura

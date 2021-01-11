@@ -103,14 +103,19 @@ feature -- Convertir atributos a tipos de datos JSON
 	local
 		new_value: JSON_VALUE
 	do
-		-- Revisar el tipo de dato
-		inspect tipo_dato.at (1).item.as_upper
-		when 'X' then
-			new_value := crear_string (valor)
-		when 'N' then
-			new_value := crear_number (valor)
+		-- Revisar si es null primero
+		if valor.is_equal("") then
+			new_value := create {JSON_NULL}
 		else
-			new_value := crear_boolean (valor)
+			-- Revisar el tipo de dato
+			inspect tipo_dato.at (1).item.as_upper
+			when 'X' then
+				new_value := crear_string (valor)
+			when 'N' then
+				new_value := crear_number (valor)
+			else
+				new_value := crear_boolean (valor)
+			end
 		end
 		Result := new_value
 	end
