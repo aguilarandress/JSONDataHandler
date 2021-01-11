@@ -12,7 +12,7 @@ create
 	initialize_arr
 
 feature -- Access
-	json_arr: JSON_ARRAY
+	json_arr: 
 
 	set_json_arr (new_arr: JSON_ARRAY)
 		-- Asigna el nuevo array de JSON

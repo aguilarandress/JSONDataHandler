@@ -33,18 +33,20 @@ feature {APPLICATION} -- Iniciar menu de la aplicacion
 			print("> ")
 			linea_ingresada := leer_linea
 		until
-
 			linea_ingresada.first.is_equal("exit")
 		loop
 			-- Revisar comando
+			-- Comando load [nombre_estructura] [path]
 			if linea_ingresada.first.is_equal ("load") then
 				load_csv_file (linea_ingresada.at (2), linea_ingresada.at (3))
+			-- Comando save [nombre_estructura] [path]
 			elseif linea_ingresada.first.is_equal ("save") then
 				save_json_file(linea_ingresada.at(2), linea_ingresada.at(3))
+			-- Comando savecsv [nombre_estructura] [path]
 			elseif linea_ingresada.first.is_equal ("savecsv") then
 				save_csv_file(linea_ingresada.at(2), linea_ingresada.at(3))
 			else
-
+				print("Comando desconocido...%N")
 			end
 			-- Continuar leyendo entrada por el usuario
 			print("> ")

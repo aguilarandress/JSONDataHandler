@@ -11,17 +11,15 @@ create
 	make
 
 feature -- Access
-	json_store: HASH_TABLE[JSON_ARRAY, STRING]
-	attr_info: HASH_TABLE[ARRAYED_LIST[STRING], STRING]
+	json_store: HASH_TABLE[ARRAYED_LIST[JSON_OBJECT], STRING]
 
 	make
 	do
 		create json_store.make(0)
-		create attr_info.make(0)
 	end
 
 feature -- Insertar nuevo arreglo JSON
-	add_json_arr (nombre: STRING new_arr: JSON_ARRAY): BOOLEAN
+	add_json_arr (nombre: STRING new_arr: ARRAYED_LIST[JSON_OBJECT]): BOOLEAN
 		-- Inserta un nuevo JSON_ARRAY con un nombre
 	do
 		-- Verificar que no exista en el store
