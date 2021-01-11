@@ -37,7 +37,7 @@ feature -- Read CSV file
 	end
 
 feature -- Escribir archivo CSV con datos JSON
-	write_estructura_json (json_arr: JSON_ARRAY)
+	write_estructura_json (json_arr: ARRAYED_LIST[JSON_OBJECT])
 	local
 		file_manager: FILE_MANAGER
 		file_lines: ARRAYED_LIST[STRING]

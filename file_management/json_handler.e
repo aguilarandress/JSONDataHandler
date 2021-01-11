@@ -12,9 +12,9 @@ create
 	initialize_arr
 
 feature -- Access
-	json_arr: 
+	json_arr: ARRAYED_LIST[JSON_OBJECT]
 
-	set_json_arr (new_arr: JSON_ARRAY)
+	set_json_arr (new_arr: ARRAYED_LIST[JSON_OBJECT])
 		-- Asigna el nuevo array de JSON
 	do
 		json_arr := new_arr
@@ -23,7 +23,7 @@ feature -- Access
 	initialize_arr
 		-- Inicializa un array vacio
 	do
-		create json_arr.make_empty
+		create json_arr.make(0)
 	end
 
 feature -- Escribe un archivos JSON con los datos
@@ -43,7 +43,7 @@ feature -- Escribe un archivos JSON con los datos
 		until
 			i > json_arr.count
 		loop
-			current_line := json_arr.i_th (i).representation
+			current_line := json_arr.at(i).representation
 			if i /= json_arr.count then
 				current_line.extend(',')
 			end
@@ -74,7 +74,7 @@ feature -- Crear objetos JSON a partir de informacion CSV
 			i > csv_structure.count
 		loop
 			-- Crear objeto y agregarlo al JSON ARRAY
-			json_arr.add(crear_objeto(nombre_atributos, tipos_de_datos, csv_structure.at(i)))
+			json_arr.extend(crear_objeto(nombre_atributos, tipos_de_datos, csv_structure.at(i)))
 			i := i + 1
 		end
 	end

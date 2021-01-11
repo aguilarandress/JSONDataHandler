@@ -80,7 +80,7 @@ feature {NONE} -- Crea un archivo JSON con los datos
 		-- Almacena la estructura `nombre_json` en un archivo JSON
 	local
 		json_handler: JSON_HANDLER
-		json_arr: JSON_ARRAY
+		json_arr: ARRAYED_LIST[JSON_OBJECT]
 	do
 		if not data_store.json_store.has (nombre_json) then
 			print("La estructura " + nombre_json + " no se encuentra almacenada...")
@@ -99,11 +99,11 @@ feature {NONE} -- Crea un archivo CSV con los datos de la estructura
 	save_csv_file (nombre_json: STRING path: STRING)
 		-- Almacena la estructura `nombre_json` en un archivo CSV
 	local
-		json_arr: JSON_ARRAY
+		json_arr: ARRAYED_LIST[JSON_OBJECT]
 		csv_handler: CSV_HANDLER
 	do
 		-- Verificar si la estructura existe
-		if not data_store.json_store.has (nombre_json) then
+		if not data_store.json_store.has(nombre_json) then
 			print("La estructura " + nombre_json + " no se encuentra almacenada...")
 		else
 			-- Obtener datos del store

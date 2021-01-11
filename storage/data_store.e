@@ -31,4 +31,13 @@ feature -- Insertar nuevo arreglo JSON
 		end
 	end
 
+feature
+	get_json_keys(nombre: STRING)
+	do
+		-- Verificar que exista en el `json_store`
+		if json_store.has (nombre) then
+			-- xd
+		end
+	end
+
 end
