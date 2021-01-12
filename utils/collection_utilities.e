@@ -7,19 +7,8 @@ note
 class
 	COLLECTION_UTILITIES
 
-create
-	set_list
-
 feature -- Crea un string a partir de una lista con `separador`
-
-	list: LIST[STRING]
-
-	set_list(new_list: LIST[STRING])
-	do
-		list := new_list
-	end
-
-	join_list(separador: CHARACTER): STRING
+	join_list(list: LIST[STRING] separador: CHARACTER): STRING
 		-- Crea un string a partir de una lista con `separador`
 	local
 		result_str: STRING
@@ -39,5 +28,27 @@ feature -- Crea un string a partir de una lista con `separador`
 		end
 		Result := result_str
 	end
+
+	join_arrayed_list(arr: ARRAYED_LIST[STRING] separador: CHARACTER): STRING
+		-- Crea un string a partir de un ARRAYED_LIST con un `separador`
+	local
+		result_str: STRING
+		i: INTEGER
+	do
+		result_str := ""
+		from
+			i := 1
+		until
+			i > arr.count
+		loop
+			result_str.append (arr.at(i))
+			if i /= arr.count then
+				result_str.extend(separador)
+			end
+			i := i + 1
+		end
+		Result := result_str
+	end
+
 
 end

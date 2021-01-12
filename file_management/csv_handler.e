@@ -51,10 +51,13 @@ feature -- Escribir archivo CSV con datos JSON
 			-- Escribir atributos
 			file_lines.extend(get_attr_string(json_arr.at(1).current_keys))
 			-- Escribir tipos de datos
-			create utils.set_list(data_types)
-			file_lines.extend(utils.join_list(';'))
+			create utils
+			file_lines.extend(utils.join_list(data_types, ';'))
+			-- Agregar valores de cada objeto
+			across json_arr as object loop
+				file_lines.extend(get_value_string(object.item))
+			end
 			file_manager.write_file (file_lines)
-			-- TODO: Obtener valores de cada fila
 		end
 	end
 
@@ -79,5 +82,60 @@ feature -- Escribir archivo CSV con datos JSON
 			i := i + 1
 		end
 		Result := attr_string
+	end
+
+	get_value_string (json_obj: JSON_OBJECT): STRING
+		-- Genera un string para valores del `json_obj`
+	local
+		i: INTEGER
+		current_val: JSON_VALUE
+		result_str: STRING
+	do
+		result_str := ""
+		from
+			i := 1
+		until
+			i > json_obj.current_keys.count
+		loop
+			current_val := json_obj.item(json_obj.current_keys.at(i))
+			-- Append value
+			if current_val /= Void then
+				result_str.append(get_csv_representation(current_val.representation))
+				-- Agregar separador
+				if i /= json_obj.current_keys.count then
+					result_str.extend(';')
+				end
+			end
+			i := i + 1
+		end
+		Result := result_str
+	end
+
+	get_csv_representation (json_val: STRING): STRING
+		-- Obtiene la representacion CSV de los valores de cada objeto
+	local
+		result_str: STRING
+		str_utils: STRING_UTILITIES
+	do
+		-- Check if null
+		if json_val.is_equal ("null") then
+			result_str := ""
+		-- Check if string
+		elseif json_val.at(1).is_equal('"') then
+			-- Eliminar double quotes
+			create str_utils.set_string(json_val)
+			str_utils.remove_first_and_last
+			result_str := str_utils.string
+		-- Check if true
+		elseif json_val.is_equal("true") then
+			result_str := "S"
+		-- Check if false
+		elseif json_val.is_equal("false") then
+			result_str := "N"
+		-- No transformation needed
+		else
+			result_str := json_val
+		end
+		Result := result_str
 	end
 end
