@@ -62,14 +62,15 @@ feature {NONE} -- Cargar archivo CSV
 		csv_structure: ARRAYED_LIST[LIST[STRING]]
 	do
 		-- Verificar si ya existe la estructura
-		if data_store.json_store.has (nombre_estructura) then
+		if data_store.json_store.has(nombre_estructura) then
 			print("Ya existe esta estructura...%N")
 		else
 			-- Leer estructura CSV
 			create csv_handler.set_file_name (file_name)
 			csv_structure := csv_handler.read_file
 
-			-- TODO: Save data types
+			-- Save data types
+			data_store.add_data_types(nombre_estructura, csv_structure.at(2))
 
 			-- Crear estrucura JSON
 			create json_handler.initialize_arr
@@ -106,6 +107,7 @@ feature {NONE} -- Crea un archivo CSV con los datos de la estructura
 		-- Almacena la estructura `nombre_json` en un archivo CSV
 	local
 		json_arr: ARRAYED_LIST[JSON_OBJECT]
+		data_types: LIST[STRING]
 		csv_handler: CSV_HANDLER
 	do
 		-- Verificar si la estructura existe
@@ -114,9 +116,10 @@ feature {NONE} -- Crea un archivo CSV con los datos de la estructura
 		else
 			-- Obtener datos del store
 			json_arr := data_store.json_store.at(nombre_json)
+			data_types := data_store.data_type_store.at(nombre_json)
 			-- Escribir archivo
 			create csv_handler.set_file_name(path)
-			csv_handler.write_estructura_json(json_arr)
+			csv_handler.write_estructura_json(json_arr, data_types)
 			print("Archivo CSV generado...%N")
 		end
 	end

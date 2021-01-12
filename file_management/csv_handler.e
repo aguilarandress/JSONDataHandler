@@ -37,19 +37,23 @@ feature -- Read CSV file
 	end
 
 feature -- Escribir archivo CSV con datos JSON
-	write_estructura_json (json_arr: detachable ARRAYED_LIST[JSON_OBJECT])
+	write_estructura_json (json_arr: detachable ARRAYED_LIST[JSON_OBJECT] data_types: detachable LIST[STRING])
 		-- Escribe la estructura de `json_arr` en un archivo con formato CSV
 	local
 		file_manager: FILE_MANAGER
+		utils: COLLECTION_UTILITIES
 		file_lines: ARRAYED_LIST[STRING]
 	do
 		create file_manager.set_file_name (file_name)
 		create file_lines.make(0)
 		-- Obtener string de atributos
-		if json_arr /= Void then
+		if json_arr /= Void and data_types /= Void then
+			-- Escribir atributos
 			file_lines.extend(get_attr_string(json_arr.at(1).current_keys))
+			-- Escribir tipos de datos
+			create utils.set_list(data_types)
+			file_lines.extend(utils.join_list(';'))
 			file_manager.write_file (file_lines)
-			-- TODO: Obtener tipos de datos
 			-- TODO: Obtener valores de cada fila
 		end
 	end
@@ -76,5 +80,4 @@ feature -- Escribir archivo CSV con datos JSON
 		end
 		Result := attr_string
 	end
-
 end
