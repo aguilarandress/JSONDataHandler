@@ -23,14 +23,13 @@ feature {APPLICATION} -- Iniciar menu de la aplicacion
 	iniciar_menu
 	local
 		linea_ingresada: LIST[STRING]
-		obj: JSON_OBJECT
 	do
 		-- Inicializar data store
 		create data_store.make
 		print ("**Ingrese un comando**%N")
 		from
 			-- Iniciar leyendo lineas
-			print("> ")
+			print(">> ")
 			linea_ingresada := leer_linea
 		until
 			linea_ingresada.first.is_equal("exit")
@@ -49,7 +48,7 @@ feature {APPLICATION} -- Iniciar menu de la aplicacion
 				print("Comando desconocido...%N")
 			end
 			-- Continuar leyendo entrada por el usuario
-			print("> ")
+			print(">> ")
 			linea_ingresada := leer_linea
 		end
 	end

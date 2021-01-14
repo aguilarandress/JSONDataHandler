@@ -45,4 +45,13 @@ feature -- Eliminar primer y ultimo caracter
 		string := result_str
 	end
 
+feature -- Reemplazar caracter
+	replace_char(old_char: CHARACTER new_char: CHARACTER)
+		-- Reemplaza el caracter `old_char` de `string` por `new_char`
+	do
+		if string.has(old_char) then
+			string.put(new_char, string.index_of(old_char, 0))
+		end
+	end
+
 end

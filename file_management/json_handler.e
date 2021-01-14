@@ -133,8 +133,12 @@ feature -- Convertir atributos a tipos de datos JSON
 		-- Crea un JSON_NUMBER a partir de un string
 	local
 		new_number: JSON_NUMBER
+		str_utils: STRING_UTILITIES
 	do
-		create new_number.make_real(valor.to_real)
+		-- Reemplazar , por el . en caso de tenerlo
+		create str_utils.set_string(valor)
+		str_utils.replace_char(',', '.')
+		create new_number.make_real(str_utils.string.to_real)
 		Result := new_number
 	end
 

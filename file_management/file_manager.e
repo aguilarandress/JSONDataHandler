@@ -25,12 +25,13 @@ feature -- Leer archivo de entrada
 		file_lines: ARRAYED_LIST[STRING]
 		entrada: PLAIN_TEXT_FILE
 	do
+		entrada.
 		-- TODO: Verificar si el archivo existe
 		-- Initialize list
 		create file_lines.make (0)
 		-- Crear handle para el archivo
 		create entrada.make_open_read (file_name)
-		if not entrada.exists then
+		if not entrada.access_exists then
 			print("Archivo no existe...")
 		else
 			-- Iniciar lectura
@@ -56,12 +57,20 @@ feature -- Escribir archivo
 		-- Escribe un archivo nuevo
 	local
 		salida: PLAIN_TEXT_FILE
+		i: INTEGER
 	do
 		create salida.make_open_write (file_name)
 		-- Escribir archivo
-		across file_lines as file_line loop
-			salida.put_string (file_line.item)
-			salida.new_line
+		from
+			i := 1
+		until
+			i > file_lines.count
+		loop
+			salida.put_string (file_lines.at(i))
+			if i /= file_lines.count then
+				salida.new_line
+			end
+			i := i + 1
 		end
 		salida.close
 	end
