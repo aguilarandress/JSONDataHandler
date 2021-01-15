@@ -12,7 +12,7 @@ create
 
 feature -- Access
 	json_store: HASH_TABLE[ARRAYED_LIST[JSON_OBJECT], STRING]
-	data_type_store: HASH_TABLE[LIST[STRING], STRING]
+	data_type_store: HASH_TABLE[detachable LIST[STRING], STRING]
 
 	make
 	do
@@ -30,7 +30,7 @@ feature -- Insertar nueva estructura JSON
 		end
 	end
 
-	add_data_types (nombre: STRING data_types: LIST[STRING])
+	add_data_types (nombre: STRING data_types: detachable LIST[STRING])
 		-- Inserta los tipos de datos para una estructura JSON
 	do
 		-- Verificar que no exista en el store

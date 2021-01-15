@@ -56,8 +56,9 @@ feature -- Escribe un archivos JSON con los datos
 		file_manager.write_file(file_lines)
 	end
 
-feature
+feature -- Obtener JSONs que cumplan con una condicion
 	get_jsons_with_condition(atributo: STRING valor: STRING): ARRAYED_LIST[JSON_OBJECT]
+		-- Obtiene JSONs que cumplan con una condicion dada
 	local
 		new_jsons: ARRAYED_LIST[JSON_OBJECT]
 		str_utils: STRING_UTILITIES
@@ -73,6 +74,7 @@ feature
 				if json_val.is_string then
 					-- Remove double quotes
 					str_utils.set_string(json_val.representation)
+					str_utils.remove_first_and_last
 					str_val := str_utils.string
 				else
 					str_val := json_val.representation
@@ -82,7 +84,6 @@ feature
 					new_jsons.extend(json_object.item)
 				end
 			end
-
 		end
 		Result := new_jsons
 	end

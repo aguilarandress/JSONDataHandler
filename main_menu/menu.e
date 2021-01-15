@@ -23,9 +23,11 @@ feature {APPLICATION} -- Iniciar menu de la aplicacion
 	iniciar_menu
 	local
 		linea_ingresada: LIST[STRING]
+		collection_utils: COLLECTION_UTILITIES
 	do
 		-- Inicializar data store
 		create data_store.make
+		create collection_utils
 		print ("**Ingrese un comando**%N")
 		from
 			-- Iniciar leyendo lineas
@@ -47,7 +49,7 @@ feature {APPLICATION} -- Iniciar menu de la aplicacion
 				save_csv_file(linea_ingresada.at(2), linea_ingresada.at(3))
 			-- Comando select [nombre] [nombre_nuevo] [atributo] = [valor]
 			elseif linea_ingresada.first.is_equal ("select") then
-				select_jsons(linea_ingresada.at(2), linea_ingresada.at(3), linea_ingresada.at(4), linea_ingresada.at(6))
+				select_jsons(linea_ingresada.at(2), linea_ingresada.at(3), linea_ingresada.at(4), collection_utils.sub_list(linea_ingresada, 6))
 			else
 				print("Comando desconocido...%N")
 			end
@@ -129,11 +131,13 @@ feature {NONE} -- Crea un archivo CSV con los datos de la estructura
 	end
 
 feature {NONE} -- Seleccionar JSON que cumplan con una condicion
-	select_jsons (nombre_json: STRING nombre_nuevo: STRING atributo: STRING valor: STRING)
+	select_jsons (nombre_json: STRING nombre_nuevo: STRING atributo: STRING valor: ARRAYED_LIST[STRING])
 	local
 		json_handler: JSON_HANDLER
 		json_arr: ARRAYED_LIST[JSON_OBJECT]
 		new_json_arr: ARRAYED_LIST[JSON_OBJECT]
+		collection_utils: COLLECTION_UTILITIES
+		data_types: detachable LIST[STRING]
 	do
 		if not data_store.json_store.has(nombre_json) then
 			print("La estructura " + nombre_json + " no se encuentra almacenada...%N")
@@ -144,10 +148,22 @@ feature {NONE} -- Seleccionar JSON que cumplan con una condicion
 			else
 				json_arr := data_store.json_store.at(nombre_json)
 				if json_arr /= Void then
+					-- Obtener JSONS que cumplan con la condicion
 					create json_handler.set_json_arr(json_arr)
-					new_json_arr := json_handler.get_jsons_with_condition (atributo, valor)
-					-- TODO: Agregar data types
-					data_store.add_json_arr(nombre_nuevo, new_json_arr)
+					-- crear string separado por espacios
+					-- TODO: Revisar que pasa si hay mas de un espacio
+					create collection_utils
+					new_json_arr := json_handler.get_jsons_with_condition(atributo, collection_utils.join_arrayed_list(valor, ' '))
+					-- Si no se obtuvieron objetos, no se agregan
+					if new_json_arr.count = 0 then
+						print("Ningun objeto cumplio con la condicion...%N")
+					else
+						-- Guardar objetos
+						data_store.add_json_arr(nombre_nuevo, new_json_arr)
+						data_types := data_store.data_type_store.at(nombre_json)
+						data_store.add_data_types(nombre_nuevo, data_types)
+						print("Objetos seleccionados...%N")
+					end
 				end
 			end
 		end

@@ -50,5 +50,23 @@ feature -- Crea un string a partir de una lista con `separador`
 		Result := result_str
 	end
 
+feature -- Obtener los elementos de un subarreglo
+	sub_list(list: LIST[STRING] index: INTEGER): ARRAYED_LIST[STRING]
+		-- Crea un subarreglo a partir de `index` de `arr`
+	local
+		new_arr: ARRAYED_LIST[STRING]
+		i: INTEGER
+	do
+		create new_arr.make(0)
+		from
+			i := index
+		until
+			i > list.count
+		loop
+			new_arr.extend(list.at(i))
+			i := i + 1
+		end
+		Result := new_arr
+	end
 
 end
