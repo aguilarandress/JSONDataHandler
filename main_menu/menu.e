@@ -115,6 +115,7 @@ feature {NONE} -- Crea un archivo CSV con los datos de la estructura
 		json_arr: ARRAYED_LIST[JSON_OBJECT]
 		data_types: LIST[STRING]
 		csv_handler: CSV_HANDLER
+		collection_utils: COLLECTION_UTILITIES
 	do
 		-- Verificar si la estructura existe
 		if not data_store.json_store.has(nombre_json) then
@@ -137,13 +138,13 @@ feature {NONE} -- Seleccionar JSON que cumplan con una condicion
 		json_arr: ARRAYED_LIST[JSON_OBJECT]
 		new_json_arr: ARRAYED_LIST[JSON_OBJECT]
 		collection_utils: COLLECTION_UTILITIES
-		data_types: detachable LIST[STRING]
+		data_types: LIST[STRING]
 	do
 		if not data_store.json_store.has(nombre_json) then
 			print("La estructura " + nombre_json + " no se encuentra almacenada...%N")
 		else
 			-- Verificar que `nombre_nuevo` no exista en el `data_store`
-			if data_store.json_store.has(nombre_nuevo) then
+			if data_store.json_store.has(nombre_nuevo) or data_store.data_type_store.has(nombre_nuevo) then
 				print("Ya existe una estructura con ese nombre...")
 			else
 				json_arr := data_store.json_store.at(nombre_json)
@@ -151,7 +152,6 @@ feature {NONE} -- Seleccionar JSON que cumplan con una condicion
 					-- Obtener JSONS que cumplan con la condicion
 					create json_handler.set_json_arr(json_arr)
 					-- crear string separado por espacios
-					-- TODO: Revisar que pasa si hay mas de un espacio
 					create collection_utils
 					new_json_arr := json_handler.get_jsons_with_condition(atributo, collection_utils.join_arrayed_list(valor, ' '))
 					-- Si no se obtuvieron objetos, no se agregan
@@ -161,8 +161,10 @@ feature {NONE} -- Seleccionar JSON que cumplan con una condicion
 						-- Guardar objetos
 						data_store.add_json_arr(nombre_nuevo, new_json_arr)
 						data_types := data_store.data_type_store.at(nombre_json)
-						data_store.add_data_types(nombre_nuevo, data_types)
-						print("Objetos seleccionados...%N")
+						if data_types /= Void then
+							data_store.add_data_types(nombre_nuevo, data_store.data_type_store.at(nombre_json))
+						end
+						print("Estructura " + nombre_nuevo + " creada...")
 					end
 				end
 			end

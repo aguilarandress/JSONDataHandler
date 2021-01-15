@@ -34,7 +34,7 @@ feature -- Insertar nueva estructura JSON
 		-- Inserta los tipos de datos para una estructura JSON
 	do
 		-- Verificar que no exista en el store
-		if not json_store.has (nombre) then
+		if not data_type_store.has(nombre) then
 			data_type_store.put (data_types, nombre)
 		end
 	end
