@@ -67,17 +67,18 @@ feature {NONE} -- Cargar archivo CSV
 			-- Leer estructura CSV
 			create csv_handler.set_file_name (file_name)
 			csv_structure := csv_handler.read_file
+			if csv_structure.count > 0 then
+				-- Save data types
+				data_store.add_data_types(nombre_estructura, csv_structure.at(2))
 
-			-- Save data types
-			data_store.add_data_types(nombre_estructura, csv_structure.at(2))
+				-- Crear estrucura JSON
+				create json_handler.initialize_arr
+				json_handler.crear_objetos(csv_structure)
 
-			-- Crear estrucura JSON
-			create json_handler.initialize_arr
-			json_handler.crear_objetos(csv_structure)
-
-			-- Guardar en data store
-			data_store.add_json_arr(nombre_estructura, json_handler.json_arr)
-			print("Estructura " + nombre_estructura + " almacenada...%N")
+				-- Guardar en data store
+				data_store.add_json_arr(nombre_estructura, json_handler.json_arr)
+				print("Estructura " + nombre_estructura + " almacenada...%N")
+			end
 		end
 	end
 

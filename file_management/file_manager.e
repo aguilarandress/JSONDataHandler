@@ -18,21 +18,19 @@ feature -- Set file name
 		file_name := name
 	end
 
-feature -- Leer archivo de entrada
 	read_file: ARRAYED_LIST[STRING]
 		-- Lee un archivo y lo almacena en un arreglo
 	local
 		file_lines: ARRAYED_LIST[STRING]
 		entrada: PLAIN_TEXT_FILE
 	do
-		entrada.
 		-- TODO: Verificar si el archivo existe
 		-- Initialize list
 		create file_lines.make (0)
 		-- Crear handle para el archivo
 		create entrada.make_open_read (file_name)
 		if not entrada.access_exists then
-			print("Archivo no existe...")
+			print("El archivo no existe%N")
 		else
 			-- Iniciar lectura
 			from
@@ -47,7 +45,6 @@ feature -- Leer archivo de entrada
 			-- Leer linea del final
 			file_lines.extend (entrada.last_string.twin)
 			entrada.close
-
 		end
 		Result := file_lines
 	end
