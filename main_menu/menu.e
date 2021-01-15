@@ -130,11 +130,26 @@ feature {NONE} -- Crea un archivo CSV con los datos de la estructura
 
 feature {NONE} -- Seleccionar JSON que cumplan con una condicion
 	select_jsons (nombre_json: STRING nombre_nuevo: STRING atributo: STRING valor: STRING)
+	local
+		json_handler: JSON_HANDLER
+		json_arr: ARRAYED_LIST[JSON_OBJECT]
+		new_json_arr: ARRAYED_LIST[JSON_OBJECT]
 	do
 		if not data_store.json_store.has(nombre_json) then
 			print("La estructura " + nombre_json + " no se encuentra almacenada...%N")
 		else
-
+			-- Verificar que `nombre_nuevo` no exista en el `data_store`
+			if data_store.json_store.has(nombre_nuevo) then
+				print("Ya existe una estructura con ese nombre...")
+			else
+				json_arr := data_store.json_store.at(nombre_json)
+				if json_arr /= Void then
+					create json_handler.set_json_arr(json_arr)
+					new_json_arr := json_handler.get_jsons_with_condition (atributo, valor)
+					-- TODO: Agregar data types
+					data_store.add_json_arr(nombre_nuevo, new_json_arr)
+				end
+			end
 		end
 	end
 

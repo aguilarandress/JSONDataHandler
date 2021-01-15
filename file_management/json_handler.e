@@ -56,6 +56,37 @@ feature -- Escribe un archivos JSON con los datos
 		file_manager.write_file(file_lines)
 	end
 
+feature
+	get_jsons_with_condition(atributo: STRING valor: STRING): ARRAYED_LIST[JSON_OBJECT]
+	local
+		new_jsons: ARRAYED_LIST[JSON_OBJECT]
+		str_utils: STRING_UTILITIES
+		json_val: attached JSON_VALUE
+		str_val: STRING
+	do
+		create new_jsons.make(0)
+		create str_utils.initialize_string
+		across json_arr as json_object loop
+			-- Check if string to remove double quotes from representation
+			json_val := json_object.item.item(create {JSON_STRING}.make_from_string (atributo))
+			if json_val /= Void then
+				if json_val.is_string then
+					-- Remove double quotes
+					str_utils.set_string(json_val.representation)
+					str_val := str_utils.string
+				else
+					str_val := json_val.representation
+				end
+				-- Check if object meets condition
+				if str_val.is_equal(valor) then
+					new_jsons.extend(json_object.item)
+				end
+			end
+
+		end
+		Result := new_jsons
+	end
+
 feature -- Crear objetos JSON a partir de informacion CSV
 	crear_objetos (csv_structure: ARRAYED_LIST[LIST[STRING]])
 		-- Crea objetos JSON a partir de una estructura CSV
