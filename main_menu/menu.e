@@ -35,6 +35,7 @@ feature {APPLICATION} -- Iniciar menu de la aplicacion
 			linea_ingresada.first.is_equal("exit")
 		loop
 			-- Revisar comando
+			-- TODO: Revisar longitud de los comandos
 			-- Comando load [nombre_estructura] [path]
 			if linea_ingresada.first.is_equal ("load") then
 				load_csv_file (linea_ingresada.at (2), linea_ingresada.at (3))
@@ -44,6 +45,9 @@ feature {APPLICATION} -- Iniciar menu de la aplicacion
 			-- Comando savecsv [nombre_estructura] [path]
 			elseif linea_ingresada.first.is_equal ("savecsv") then
 				save_csv_file(linea_ingresada.at(2), linea_ingresada.at(3))
+			-- Comando select [nombre] [nombre_nuevo] [atributo] = [valor]
+			elseif linea_ingresada.first.is_equal ("select") then
+				select_jsons(linea_ingresada.at(2), linea_ingresada.at(3), linea_ingresada.at(4), linea_ingresada.at(6))
 			else
 				print("Comando desconocido...%N")
 			end
@@ -121,6 +125,16 @@ feature {NONE} -- Crea un archivo CSV con los datos de la estructura
 			create csv_handler.set_file_name(path)
 			csv_handler.write_estructura_json(json_arr, data_types)
 			print("Archivo CSV generado...%N")
+		end
+	end
+
+feature {NONE} -- Seleccionar JSON que cumplan con una condicion
+	select_jsons (nombre_json: STRING nombre_nuevo: STRING atributo: STRING valor: STRING)
+	do
+		if not data_store.json_store.has(nombre_json) then
+			print("La estructura " + nombre_json + " no se encuentra almacenada...%N")
+		else
+
 		end
 	end
 
