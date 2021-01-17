@@ -10,7 +10,7 @@ class
 create
 	set_file_name
 
-feature -- Set file name
+feature -- Initialization
 	file_name: STRING
 
 	set_file_name (name: STRING)
@@ -18,6 +18,23 @@ feature -- Set file name
 		file_name := name
 	end
 
+feature -- Verifica si el archivo existe
+	check_file_exists: BOOLEAN
+		-- Determina si el archivo existe en el file system
+	local
+		file_test: PLAIN_TEXT_FILE
+		file_path: PATH
+	do
+		create file_path.make_from_string (file_name)
+		create file_test.make_with_path (file_path.absolute_path)
+		if file_test.exists and then file_test.is_readable then
+			Result := true
+		else
+			Result := false
+		end
+	end
+
+feature -- Leer el archivo `file_name`
 	read_file: ARRAYED_LIST[STRING]
 		-- Lee un archivo y lo almacena en un arreglo
 	local
@@ -27,11 +44,11 @@ feature -- Set file name
 		-- TODO: Verificar si el archivo existe
 		-- Initialize list
 		create file_lines.make (0)
-		-- Crear handle para el archivo
-		create entrada.make_open_read (file_name)
-		if not entrada.access_exists then
+		if not check_file_exists then
 			print("El archivo no existe%N")
 		else
+			-- Crear handle para el archivo
+			create entrada.make_open_read (file_name)
 			-- Iniciar lectura
 			from
 				entrada.read_line
