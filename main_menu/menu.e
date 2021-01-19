@@ -50,6 +50,8 @@ feature {APPLICATION} -- Iniciar menu de la aplicacion
 			-- Comando select [nombre] [nombre_nuevo] [atributo] = [valor]
 			elseif linea_ingresada.first.is_equal ("select") then
 				select_jsons(linea_ingresada.at(2), linea_ingresada.at(3), linea_ingresada.at(4), collection_utils.sub_list(linea_ingresada, 6))
+			elseif linea_ingresada.first.is_equal("project") then
+				project_structure(linea_ingresada.at(2), linea_ingresada.at(3), collection_utils.sub_list(linea_ingresada, 4))
 			else
 				print("Comando desconocido...%N")
 			end
@@ -143,7 +145,7 @@ feature {NONE} -- Seleccionar JSON que cumplan con una condicion
 		else
 			-- Verificar que `nombre_nuevo` no exista en el `data_store`
 			if data_store.json_store.has(nombre_nuevo) or data_store.data_type_store.has(nombre_nuevo) then
-				print("Ya existe una estructura con ese nombre...")
+				print("Ya existe una estructura con ese nombre...%N")
 			else
 				json_arr := data_store.json_store.at(nombre_json)
 				if json_arr /= Void then
@@ -162,8 +164,36 @@ feature {NONE} -- Seleccionar JSON que cumplan con una condicion
 						if data_types /= Void then
 							data_store.add_data_types(nombre_nuevo, data_store.data_type_store.at(nombre_json))
 						end
-						print("Estructura " + nombre_nuevo + " creada...")
+						print("Estructura " + nombre_nuevo + " creada...%N")
 					end
+				end
+			end
+		end
+	end
+
+feature
+	project_structure (nombre_json: STRING nombre_nuevo: STRING atributos: ARRAYED_LIST[STRING])
+	local
+		json_arr: ARRAYED_LIST[JSON_OBJECT]
+		new_json_arr: ARRAYED_LIST[JSON_OBJECT]
+		json_handler: JSON_HANDLER
+	do
+		-- Verificar que la estructura con `nombre_json` exista
+		if not data_store.json_store.has(nombre_json) then
+			print("La estructura " + nombre_json + " no se encuentra almacenada...%N")
+		else
+			-- Verificar que la estructura `nombre_nuevo` no exista
+			if data_store.json_store.has(nombre_nuevo) then
+				print("La estructura " + nombre_nuevo + " ya existe...%N")
+			else
+				-- Obtener estructura JSON
+				json_arr := data_store.json_store.at(nombre_json)
+				if json_arr /= Void then
+					create json_handler.set_json_arr(json_arr)
+					-- Proyectar jsons
+					new_json_arr := json_handler.project_jsons(atributos)
+					data_store.add_json_arr(nombre_nuevo, new_json_arr)
+					-- TODO: Almacenar los tipos de datos
 				end
 			end
 		end

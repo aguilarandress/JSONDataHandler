@@ -41,11 +41,10 @@ feature -- Leer el archivo `file_name`
 		file_lines: ARRAYED_LIST[STRING]
 		entrada: PLAIN_TEXT_FILE
 	do
-		-- TODO: Verificar si el archivo existe
 		-- Initialize list
 		create file_lines.make (0)
 		if not check_file_exists then
-			print("El archivo no existe%N")
+			print("El archivo no existe...%N")
 		else
 			-- Crear handle para el archivo
 			create entrada.make_open_read (file_name)

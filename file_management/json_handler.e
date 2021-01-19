@@ -88,6 +88,53 @@ feature -- Obtener JSONs que cumplan con una condicion
 		Result := new_jsons
 	end
 
+feature -- Proyectar jsons
+	project_jsons(atributos: ARRAYED_LIST[STRING]): ARRAYED_LIST[JSON_OBJECT]
+		-- Obtiene JSONs con los `atributos` especificados
+	require
+		min_arr_length: json_arr.count > 0
+		min_attr_length: atributos.count > 0
+	local
+		result_arr: ARRAYED_LIST[JSON_OBJECT]
+		i: INTEGER
+	do
+		create result_arr.make(0)
+		from
+			i := 1
+		until
+			i > json_arr.count
+		loop
+			-- Crear objeto con nuevo con atributos
+			result_arr.extend(project_json_object(json_arr.at(i), atributos))
+			i := i + 1
+		end
+		Result := result_arr
+	end
+
+	project_json_object (json_obj: JSON_OBJECT atributos: ARRAYED_LIST[STRING]): JSON_OBJECT
+		-- Obtiene un objetos JSON con los `atributos` especificados
+	require
+		min_keys: json_obj.current_keys.count > 0
+	local
+		new_json_obj: JSON_OBJECT
+		current_value: JSON_VALUE
+		i: INTEGER
+	do
+		create new_json_obj.make_empty
+		from
+			i := 1
+		until
+			i > atributos.count
+		loop
+			-- Get value
+			current_value := json_obj.item(create {JSON_STRING}.make_from_string(atributos.at(i)))
+			-- Add to JSON object
+			new_json_obj.put(current_value, atributos.at(i))
+			i := i + 1
+		end
+		Result := new_json_obj
+	end
+
 feature -- Crear objetos JSON a partir de informacion CSV
 	crear_objetos (csv_structure: ARRAYED_LIST[LIST[STRING]])
 		-- Crea objetos JSON a partir de una estructura CSV
@@ -170,7 +217,7 @@ feature -- Convertir atributos a tipos de datos JSON
 		-- Reemplazar , por el . en caso de tenerlo
 		create str_utils.set_string(valor)
 		str_utils.replace_char(',', '.')
-		create new_number.make_real(str_utils.string.to_real)
+		create new_number.make_real(str_utils.string.to_real_64)
 		Result := new_number
 	end
 
