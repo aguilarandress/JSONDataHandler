@@ -171,10 +171,12 @@ feature {NONE} -- Seleccionar JSON que cumplan con una condicion
 		end
 	end
 
-feature
+feature {NONE} -- Proyecta una estructura con ciertos atributos
 	project_structure (nombre_json: STRING nombre_nuevo: STRING atributos: ARRAYED_LIST[STRING])
+		-- Proyecta la estructura `nombre_json` en `nombre_nuevo`
 	local
 		json_arr: ARRAYED_LIST[JSON_OBJECT]
+		data_types: LIST[STRING]
 		new_json_arr: ARRAYED_LIST[JSON_OBJECT]
 		json_handler: JSON_HANDLER
 	do
@@ -188,12 +190,15 @@ feature
 			else
 				-- Obtener estructura JSON
 				json_arr := data_store.json_store.at(nombre_json)
-				if json_arr /= Void then
+				data_types := data_store.data_type_store.at(nombre_json)
+				if json_arr /= Void and data_types /= Void then
 					create json_handler.set_json_arr(json_arr)
 					-- Proyectar jsons
 					new_json_arr := json_handler.project_jsons(atributos)
 					data_store.add_json_arr(nombre_nuevo, new_json_arr)
-					-- TODO: Almacenar los tipos de datos
+					-- Guardar tipos de datos
+					data_store.project_data_types(nombre_nuevo, nombre_json, atributos)
+					print("Estructura " + nombre_nuevo + " almacenada...%N")
 				end
 			end
 		end
