@@ -34,20 +34,24 @@ feature -- Escribe un archivos JSON con los datos
 		file_manager: FILE_MANAGER
 		i: INTEGER
 		current_line: STRING
+		representation_utils: REPRESENTATION_UTILS
 	do
 		create file_lines.make (0)
 		file_lines.extend ("[")
+		create representation_utils.make
 		-- Add string representations of objects
 		from
 			i := 1
 		until
 			i > json_arr.count
 		loop
-			current_line := json_arr.at(i).representation
+			-- Get object representation
+			representation_utils.create_json_string(json_arr.at(i))
 			if i /= json_arr.count then
-				current_line.extend(',')
+				file_lines.extend(representation_utils.result_string + ",")
+			else
+				file_lines.extend(representation_utils.result_string)
 			end
-			file_lines.extend (current_line)
 			i := i + 1
 		end
 		file_lines.extend ("]")
@@ -217,7 +221,7 @@ feature -- Convertir atributos a tipos de datos JSON
 		-- Reemplazar , por el . en caso de tenerlo
 		create str_utils.set_string(valor)
 		str_utils.replace_char(',', '.')
-		create new_number.make_real(str_utils.string.to_real_64)
+		create new_number.make_real(str_utils.string.to_double)
 		Result := new_number
 	end
 

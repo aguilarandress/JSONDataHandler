@@ -89,7 +89,9 @@ feature -- Escribir archivo CSV con datos JSON
 	local
 		i: INTEGER
 		current_val: JSON_VALUE
+		current_string: STRING
 		result_str: STRING
+		formatter: FORMAT_DOUBLE
 	do
 		result_str := ""
 		from
@@ -100,7 +102,16 @@ feature -- Escribir archivo CSV con datos JSON
 			current_val := json_obj.item(json_obj.current_keys.at(i))
 			-- Append value
 			if current_val /= Void then
-				result_str.append(get_csv_representation(current_val.representation))
+				-- Verificar si es numero
+				if current_val.is_number then
+					-- Format number
+					create formatter.make(10, 2)
+					current_string := formatter.formatted(current_val.representation.to_real_64)
+					current_string.adjust
+					result_str.append(current_string)
+				else
+					result_str.append(get_csv_representation(current_val.representation))
+				end
 				-- Agregar separador
 				if i /= json_obj.current_keys.count then
 					result_str.extend(';')
