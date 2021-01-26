@@ -10,10 +10,6 @@ Lenguajes de programacion - Tarea Programada 3
 
 Se necesita tener Eiffel Studio instalado para la ejecución del programa.
 
-### Comandos
-
-TODO
-
 ## Application Info
 
 ### Author
